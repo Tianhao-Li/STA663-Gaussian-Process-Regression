@@ -97,64 +97,6 @@ The goal therefore is to find,
 
 ![\\underset{\\sigma^2_n, \\sigma^2_s, l}{\\text{argmax}} \\, L(y) \\quad \\text{or} \\quad \\underset{\\sigma^2_n, \\sigma^2_s, l}{\\text{argmin}} \\, -L(y).](https://latex.codecogs.com/svg.latex?%5Cunderset%7B%5Csigma%5E2_n%2C%20%5Csigma%5E2_s%2C%20l%7D%7B%5Ctext%7Bargmax%7D%7D%20%5C%2C%20L%28y%29%20%5Cquad%20%5Ctext%7Bor%7D%20%5Cquad%20%5Cunderset%7B%5Csigma%5E2_n%2C%20%5Csigma%5E2_s%2C%20l%7D%7B%5Ctext%7Bargmin%7D%7D%20%5C%2C%20-L%28y%29. "\underset{\sigma^2_n, \sigma^2_s, l}{\text{argmax}} \, L(y) \quad \text{or} \quad \underset{\sigma^2_n, \sigma^2_s, l}{\text{argmin}} \, -L(y).")
 
-#### Details
-
-For this task you will need to implement a python function which
-implements maximum likelihood estimation for this class of model and
-meets the following requirements:
-
--   The maximum likelihood estimate should be made using an appropriate
-    optimizer
-
-    -   In order to make the process simpler - you may treat
-        ![\\sigma^2_n](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_n "\sigma^2_n")
-        as fixed with a value of 0.1 (which is the true value for all
-        three data sets).
-    -   There is no simple closed form for the gradient of the
-        likelihood in terms of
-        ![l](https://latex.codecogs.com/svg.latex?l "l") and
-        ![\\sigma^2_s](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_s "\sigma^2_s"),
-        so choose an optimization method that does not require the
-        gradient.
-    -   All parameters must be
-        ![\\geq 0](https://latex.codecogs.com/svg.latex?%5Cgeq%200 "\geq 0")
-        to produce a valid covariance, construct an appropriate
-        `Bounds()` object to aid in the optimization.
-    -   Optimization methods may fail based on the initial guess
-        provided - as such you should initialize at multiple starting
-        points and only keep results which succeed
-        -   If all optimization attempts fail then raise a
-            `RuntimeError`.
-        -   Feel free to ignore any warnings that are produced by the
-            optimizer (so long as at least one attempt succeeds)
-
--   Write a function named `fit()` which takes the following arguments:
-
-    -   `d` - data set to fit (pandas data frame with `x` and `y`
-        columns)
-    -   `n_init` - number of initial guesses to use (i.e. number of
-        optimizations to run)
-    -   `lb` - list (or array) of parameter lower bounds - we suggest
-        not using 0 but rather a small value like `1e-6`.
-    -   `ub` - list (or array) of parameter upper bounds - we suggest
-        `[0.1, 5, 2]` as reasonable defaults.
-    -   `seed` - a seed value which will be used to initialize
-        `numpy.random.default_rng()`, which will then be used for all
-        random number generation within the function.
-
--   Your function must return a list with the MLEs of
-    ![\\sigma^2_n](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_n "\sigma^2_n"),
-    ![\\sigma^2_s](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_s "\sigma^2_s"),
-    ![l](https://latex.codecogs.com/svg.latex?l "l") (3 double values)
-
-    -   If more than one of the optimization attempts succeeded, select
-        the best and return only those MLE values.
-
--   Make sure that all example calls to `fit()` do not use the same
-    seed.
-
--   Include a brief write up describing your function and implementation
-    approach.
 
 ------------------------------------------------------------------------
 
@@ -215,45 +157,6 @@ locations. Note that
 As mentioned in the preceding task - we will assume that
 ![\\mu](https://latex.codecogs.com/svg.latex?%5Cmu "\mu") and
 ![\\mu_p](https://latex.codecogs.com/svg.latex?%5Cmu_p "\mu_p") are 0.
-
-#### Details
-
-For this task you will need to implement a python function which
-calculates the mean and covariance of conditional distribution described
-above and meets the following requirements:
-
--   Write a function named `predict()` which takes the following
-    arguments:
-
-    -   `d` - data set that was fit (must match the data frame used to
-        calculate theta)
-    -   `theta` - list of MLEs of
-        ![\\sigma^2_n](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_n "\sigma^2_n"),
-        ![\\sigma^2_s](https://latex.codecogs.com/svg.latex?%5Csigma%5E2_s "\sigma^2_s"),
-        and ![l](https://latex.codecogs.com/svg.latex?l "l") from \`
-    -   `x_p` - array of `x` prediction locations (should span the range
-        of `x`s in `d`)
-    -   `n_draws` - number of draws to make from the conditional
-        distribution
-    -   `seed` - a seed value which will be used to initialize
-        `numpy.random.default_rng()` for this function.
-
--   Your function must return a pandas data frame with 1+`n_draws`
-    columns: one `x` column (`x_p`) and `n_draws` `y` columns,
-
-    -   Draws can be made via the `multivariate_normal()` method of your
-        `numpy.random.default_rng()` instance or via a cholesky
-        decomposition with unit normal draws.
-    -   Generate samples as efficiently as possible (avoid repeated
-        calls to `multivariate_normal()`)
-    -   DataFrame should be returned in a “wide” format, all columns
-        should have a reasonable name.
-
--   Make sure that all example calls to `predict()` do not use the same
-    seed.
-
--   Include a brief write up describing your function and implementation
-    approach.
 
 ------------------------------------------------------------------------
 
